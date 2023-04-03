@@ -1,3 +1,4 @@
+<!-- link to participant db: https://docs.google.com/spreadsheets/d/1wEV73KDAlCXaljfLkqUhbhChDyusrJqWPt2Ds_SJ-BU/edit?usp=sharing -->
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
@@ -5,11 +6,87 @@
   <meta charset="utf-8" />
   <title>Register Page</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/form.css">
+  <link rel="stylesheet" href="form.css">
+  <script
+		src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+		crossorigin="anonymous">
+  </script>
+	<script>
+		function SubForm (){
+
+      function hash(string) {
+        var hash = 0;
+        if (string.length == 0) return hash;
+        for (x = 0; x <string.length; x++) {
+          ch = string.charCodeAt(x);
+          hash = ((hash <<5) - hash) + ch;
+          hash = hash & hash;
+        }
+      return hash;
+      }
+  
+      var email = document.getElementById("re").value;
+      var password = hash(document.getElementById("rp").value);
+
+      console.log(email);
+      console.log(password);
+
+    // Generate UUID
+      function CreateUUID() {
+          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+       });
+      }
+
+      if (email != "" && password != "") {
+      fetch("https://api.apispreadsheets.com/data/3GWRr55d1ylSQjYJ/", {
+      method: "POST",
+      body: JSON.stringify({"data": {"User_ID":CreateUUID(),"User_PW":password,"User_Email":email}}),
+      }).then(res =>{
+      if (res.status === 201){
+        alert("Account successfully made!")
+        window.location.href = "login-student.html"
+      }
+      else{
+          if (email == "") {
+            alert("Please enter your email")
+          }
+          else if (password == "") {
+            alert("Please enter your password")
+          }
+          else alert("Error")
+      }
+    })
+		}
+    document.getElementById("re").value ="";
+    document.getElementById("rp").value=""; 
+
+			// $.ajax({
+			// 	url:"https://api.apispreadsheets.com/data/3GWRr55d1ylSQjYJ/",
+			// 	type:"post",
+			// 	data:$("#registerForm").serializeArray(),
+			// 	success: function(){
+      //     if (email != "" && password != "") {
+      //       alert("Account successfully made!")
+      //       window.location.href = "index.html"
+      //     }
+			// 	},
+			// 	error: function(){
+      //     if (email == "") {
+      //       alert("Please enter your email")
+      //     }
+      //     else if (password == "") {
+      //       alert("Please enter your password")
+      //     }
+			// 	}
+			// });
+  }
+
+  </script>
 </head>
-
 <body>
-
   <body>
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
@@ -19,34 +96,96 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link active" aria-current="page" href="/login-student.html">Student</a>
-            <a class="nav-link" aria-current="page" href="/login-researcher.html">Researcher</a>
+            <a class="nav-link active" aria-current="page" href="login-student.html">Student</a>
+            <!-- <a class="nav-link" aria-current="page" href="login-researcher.html">Researcher</a> -->
           </div>
         </div>
       </div>
     </nav>
 
-    <div class="alert-box">
+    <!-- <div class="alert-box">
         <p class="alert"></p>
-    </div>
+    </div> -->
 
-    <div class="form">
+    <div id="registerForm">
+      <h1 class="heading">Create Account</h1>
+        <input id="re" name="User_Email" type="email" placeholder="Enter Email" class="email" required>
+        <input id="rp" name="User_PW" type="text" placeholder="Enter Password" class="password" required>
+        <button id="submit" value="Submit" class="submit" type="submit" onclick='SubForm()'>Create Account</button>
+      <a href="login-student.html" class="link">Already have an account? Log In</a>
+    </div>
+  </body>
+    
+      <!-- <div>
         <h1 class="heading">Create Account</h1>
-        <input id="re" type="email" placeholder="Enter Email" autocomplete="off" class="email" required>
-        <input id="rp" type="password" placeholder="Enter Password" autocomplete="off" class="password" required>
+        <form method="POST" action="https://script.google.com/macros/s/AKfycbzvLQt_MlsiEQCcBxGg1YGId5yIGNXwh3Xn7kQZG2tK2bGRiF9B1_qJVkCYTPEhmiiAOw/exec"></form>
+        <input id="re" name="User_Email" type="email" placeholder="Enter Email" autocomplete="off" class="email" required>
+        <input id="rp" name="User_PW" type="password" placeholder="Enter Password" autocomplete="off" class="password" required>
         <input id="rrp" type="password" placeholder="Confirm Password" autocomplete="off" class="confirm password" required>
-        <button type="submit" onclick="register()" value="Submit" class="submit">Create Account</button>
-        <a href="/login-student.html" class="link">Already have an account? Log In</a>
+        <button id="submit" onclick="register()" value="Submit" class="submit" type="submit">Create Account</button>
+      </form>
+      <a href="login-student.html" class="link">Already have an account? Log In</a>
+      </div> -->
 
-      </div>
-        
-    </div>
-  </div>
-</form>
+  <!-- </div>
+  <script>
+    function register(){
+    // event.preventDefault();
+    var email = document.getElementById("re").value;
+    var password = document.getElementById("rp").value;
+    // var passwordRetype = document.getElementById("rrp").value;
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  <script src="form.js"></script>
-    <!-- <script src="elephantsql.js"></script>
-    <script src="server.js"></script> -->
+    if (email == ""){
+        alert("Email required.");
+        return ;
+    }
+    else if (password == ""){
+        alert("Password required.");
+        return ;
+    }
+    // else if (passwordRetype == ""){
+    //     alert("Password required.");
+    //     return ;
+    // }
+    // else if ( password != passwordRetype ){
+    //     alert("Passwords don't match");
+    //     return;
+    // }
+    else if(true){
 
-</body>
+        const form = document.querySelector("#form")
+        const submitButton = document.querySelector("#submit")
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzvLQt_MlsiEQCcBxGg1YGId5yIGNXwh3Xn7kQZG2tK2bGRiF9B1_qJVkCYTPEhmiiAOw/exec'
+
+        submitButton.disabled = true
+        let requestBody = {
+          email, password
+        }
+        console.log(requestBody)
+        fetch(scriptURL, {method: 'POST', body: requestBody} )
+        .then(response => {
+              alert('Success!', response)
+              console.log(response.body)
+              submitButton.disabled = false
+        })
+        .catch(error => {
+        alert('Error!', error.message)
+        submitButton.disabled = false
+        })
+
+        alert("Thanks for making an account!");
+
+        window.location.href("login-student.html");
+
+        document.getElementById("re").value ="";
+        document.getElementById("rp").value="";
+        document.getElementById("rrp").value="";
+    }
+    else{
+        alert("Your email is already associated with an account");
+        return ;
+    }
+} -->
+  
+<!-- </body> -->
